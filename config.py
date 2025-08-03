@@ -1,13 +1,18 @@
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+
+# Carrega variáveis do arquivo .env
+load_dotenv()
 
 # Configurações de mês e e-mails
 MES_ANTERIOR = "Maio"
 MES = "06 - Junho"
-EMAIL_FROM = 'vigor.imob@gmail.com'
-#EMAIL_PASSWORD = 'uryt lswm ptkb kuwq' #Vigor
-EMAIL_PASSWORD = 'qzls bxhy uiei mtiv'
-EMAIL_TO_PROP = 'victorlmc2002@gmail.com'
-EMAIL_TO_INQUILINO = 'suporte@vigornegocios.com.br'
+EMAIL_FROM = os.getenv("EMAIL_FROM")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+EMAIL_TO_PROP = os.getenv("EMAIL_TO_PROP")
+EMAIL_TO_INQUILINO = os.getenv("EMAIL_TO_INQUILINO")
 
 # Quantidade de imóveis a processar
 QTD = 57
