@@ -13,11 +13,17 @@ def ler_txt(path, lista):
             if linha:
                 partes = linha.split(". ", 1)
                 if len(partes) == 2:
-                    lista.append(partes[1])
+                    conteudo = partes[1]
+                    if ',' in conteudo:
+                        listatemp = [item.strip() for item in conteudo.split(',')]
+                        lista.append(listatemp)
+                    else:
+                        lista.append(conteudo.strip())
                 else:
                     lista.append(linha)
             else:
                 lista.append("")
+    print(lista)
 
 def extrair_numero(nome_arquivo):
     match = re.search(r'\d+', Path(nome_arquivo).stem)

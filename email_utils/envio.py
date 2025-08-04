@@ -20,7 +20,13 @@ def criar_email(devedor, texto_formatado, anexos):
     msg = MIMEMultipart('related')
     msg['Subject'] = extrair_mensagem_assunto(anexos[0])
     msg['From'] = EMAIL_TO_PROP
-    msg['To'] = EMAIL_TO_PROP
+    email_inquilino = devedor._email_inquilino
+    if isinstance(email_inquilino, list):
+        msg['To'] = email_inquilino[0]
+        if len(email_inquilino) > 1:
+            msg['Cc'] = ', '.join(email_inquilino[1:])
+    else:
+        msg['To'] = email_inquilino
 
     saudacao = f"Boa tarde, {devedor._nome_inquilino.split()[0].capitalize()}<br>"
 
