@@ -1,8 +1,12 @@
 class Devedores:
-    def __init__(self, endereco, nome_inquilino, email_inquilino, valor, aluguel, iptu, cond, cotas_extras, repasse, taxa, tarifa, pdfboleto, pdfcond, pdfrepasse):
+    def __init__(self, endereco, nome_inquilino, email_inquilino, nome_prop,
+                  email_prop, valor, aluguel, iptu, cond, cotas_extras, repasse,
+                    taxa, tarifa, pdfboleto, pdfcond, pdfrepasse):
         self._endereco = endereco
         self._nome_inquilino = nome_inquilino
         self._email_inquilino = email_inquilino
+        self._nome_prop = nome_prop
+        self._email_prop = email_prop
         self._valor = self.converter_para_float(valor)
         self._aluguel = self.converter_para_float(aluguel)
         self._iptu = self.converter_para_float(iptu)
@@ -23,5 +27,4 @@ class Devedores:
             return valor  # Se não for possível converter, mantém o valor original
     
     def __str__(self):
-        #return f'{self._nome_inquilino} | {self._valor} | {self._aluguel} | {self._iptu} | {self._cond} | {self._cotas_extras} | {self._repasse} | {self._tarifa} | {self._pdfboleto} | {self._pdfcond} | {self._pdfrepasse}'
-        return f'{self._pdfboleto}'
+        return f'{self._nome_prop}'

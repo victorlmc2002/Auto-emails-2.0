@@ -42,9 +42,9 @@ class EmailInterface:
 
         self.recipient_var = tk.StringVar(value="inquilino")
         ttk.Radiobutton(options_frame, text="Enviar para Inquilino", variable=self.recipient_var,
-                        value="inquilino").pack(side=tk.LEFT, padx=10)
+                        value="inquilino", command=self.update_names).pack(side=tk.LEFT, padx=10)
         ttk.Radiobutton(options_frame, text="Enviar para Proprietário", variable=self.recipient_var,
-                        value="proprietario").pack(side=tk.LEFT, padx=10)
+                        value="proprietario", command=self.update_names).pack(side=tk.LEFT, padx=10)
 
         button_frame = ttk.Frame(main_frame)
         button_frame.pack(fill=tk.X, pady=10)
@@ -54,6 +54,23 @@ class EmailInterface:
         ttk.Button(button_frame, text="Enviar Selecionados", command=self.send_selected).pack(side=tk.RIGHT, padx=5)
 
         self.tree.bind("<Button-1>", self.on_click)
+
+    def populate_tree(self):
+        for item in self.tree.get_children():
+            self.tree.delete(item)
+        # Decide qual nome mostrar
+        show_prop = self.recipient_var.get() == "proprietario"
+        for i, devedor in enumerate(self.devedores, 1):
+            nome = devedor._nome_prop if show_prop else devedor._nome_inquilino
+            self.tree.insert("", "end", values=(f"{i} - {nome}", f"{devedor._endereco}"), tags=(str(i),))
+        # Reaplica seleção visual
+        for idx in self.selected_items:
+            item = self.tree.get_children()[idx-1]
+            tags = self.tree.item(item, "tags")
+            self.tree.item(item, tags=(tags[0], 'selected'))
+
+    def update_names(self):
+        self.populate_tree()
 
     def on_click(self, event):
         item = self.tree.identify_row(event.y)

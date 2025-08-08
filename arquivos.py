@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 from itertools import groupby
 import re
 from pathlib import Path
-from config import MES, PASTA_BOLETOS, PASTA_CONDOMINIO, PASTA_REPASSES, ARQ_EXCEL, TXT_ENDERECOS, TXT_NOMES, TXT_EMAILS
+from config import MES, PASTA_BOLETOS, PASTA_CONDOMINIO, PASTA_REPASSES, ARQ_EXCEL, TXT_ENDERECOS, TXT_NOMES_INQUILINOS, TXT_EMAILS_INQUILINOS, TXT_NOMES_PROP, TXT_EMAILS_PROP
 from modelos.devedor import Devedores
 
 def ler_txt(path, lista):
@@ -23,7 +23,7 @@ def ler_txt(path, lista):
                     lista.append(linha)
             else:
                 lista.append("")
-    print(lista)
+    #print(lista)
 
 def extrair_numero(nome_arquivo):
     match = re.search(r'\d+', Path(nome_arquivo).stem)
@@ -66,9 +66,9 @@ def extrair_dados_linha(planilha, x, y):
     dados['repasse'] = planilha.cell(row=x+3, column=y+1).value
     return dados
 
-def criar_devedor(endereco, nome, email, dados, pdf, cond, repasse):
+def criar_devedor(endereco, nome_inquilino, email_inquilino, nome_prop, email_prop, dados, pdf, cond, repasse):
     return Devedores(
-        endereco, nome, email, dados['valor'], dados['aluguel'], dados['iptu'], dados['cond'],
+        endereco, nome_inquilino, email_inquilino, nome_prop, email_prop, dados['valor'], dados['aluguel'], dados['iptu'], dados['cond'],
         dados['cotas_extras'], dados['repasse'], dados['taxa'], dados['tarifa'],
         pdf, None if dados['cond'] is not None else cond, repasse
     )
@@ -84,14 +84,18 @@ def ler_planilha(n):
     repasses = processar_pasta(PASTA_REPASSES)
 
     enderecos = []
-    nomes = []
-    emails = []
+    nomes_inquilinos = []
+    emails_inquilinos = []
+    nomes_prop = []
+    emails_prop = []
     ler_txt(TXT_ENDERECOS, enderecos)
-    ler_txt(TXT_NOMES, nomes)
-    ler_txt(TXT_EMAILS, emails)
+    ler_txt(TXT_NOMES_INQUILINOS, nomes_inquilinos)
+    ler_txt(TXT_EMAILS_INQUILINOS, emails_inquilinos)
+    ler_txt(TXT_NOMES_PROP, nomes_prop)
+    ler_txt(TXT_EMAILS_PROP, emails_prop)
 
-    if not (len(enderecos) == len(nomes) == len(emails)):
-        raise ValueError("As listas de endereços, nomes e emails devem ter o mesmo tamanho.")
+    if not (len(enderecos) == len(nomes_inquilinos) == len(emails_inquilinos) == len(nomes_prop) == len(emails_prop)):
+        raise ValueError("As listas de endereços, nomes_inquilinos e emails_inquilinos devem ter o mesmo tamanho.")
 
     while imovel < n:
         for y in range(2, 17, 5):
@@ -99,11 +103,13 @@ def ler_planilha(n):
                 break
             dados = extrair_dados_linha(planilha, x, y)
             devedor = criar_devedor(
-                enderecos[imovel], nomes[imovel], emails[imovel], dados,
+                enderecos[imovel], nomes_inquilinos[imovel], emails_inquilinos[imovel], 
+                nomes_prop[imovel], emails_prop[imovel], dados,
                 pdfs[imovel] if imovel < len(pdfs) else None,
                 conds[imovel] if imovel < len(conds) else None,
                 repasses[imovel] if imovel < len(repasses) else None
             )
+            print(devedor)
             devedores.append(devedor)
             imovel += 1
         x += 17

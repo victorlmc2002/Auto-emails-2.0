@@ -29,5 +29,7 @@ LOGO_PATH = BASE_PATH / "assets/lg.png"
 
 # Caminhos para arquivos de entrada
 TXT_ENDERECOS = BASE_PATH / "assets/enderecos.txt"
-TXT_NOMES = BASE_PATH / "assets/nomes_inquilinos.txt"
-TXT_EMAILS = BASE_PATH / "assets/emails_inquilinos.txt"
+TXT_NOMES_INQUILINOS = BASE_PATH / "assets/nomes_inquilinos.txt"
+TXT_EMAILS_INQUILINOS = BASE_PATH / "assets/emails_inquilinos.txt"
+TXT_EMAILS_PROP = BASE_PATH / "assets/emails_prop.txt"
+TXT_NOMES_PROP = BASE_PATH / "assets/nomes_prop.txt"
