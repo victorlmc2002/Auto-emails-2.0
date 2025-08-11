@@ -1,7 +1,6 @@
 # Auto_emails_Vigor
 
-<<<<<<< HEAD
-Automatize o envio de boletos por e-mail para inquilinos e proprietários da empresa Vigor - Gestão de Negócios Imobiliários.
+##_Automatize o envio de boletos por e-mail para inquilinos e proprietários da empresa Vigor - Gestão de Negócios Imobiliários._
 
 ## Objetivo
 
@@ -79,5 +78,3 @@ Este projeto tem como objetivo agilizar o processo de envio de boletos, taxas co
 ## 📝 Observações
 
 - O sistema utiliza a planilha já existente da empresa, sem necessidade de adaptações.
-- Os e-mails são enviados utilizando as credenciais configuradas diretamente no código. Certifique-se de proteger essas
->>>>>>> b279cae29a45156656553cfe69499354189dccd3
