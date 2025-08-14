@@ -16,24 +16,38 @@ def extrair_mensagem_assunto(caminho_arquivo):
     return partes.rsplit(" - ", 1)[0] if " - " in partes else partes
 
 
-def criar_email(devedor, texto_formatado, anexos):
+def criar_email(devedor, texto_formatado, anexos, tipo):
     msg = MIMEMultipart('related')
     msg['Subject'] = extrair_mensagem_assunto(anexos[0])
     msg['From'] = EMAIL_TO_PROP
-    email_inquilino = devedor._email_inquilino
-    if isinstance(email_inquilino, list):
-        msg['To'] = email_inquilino[0]
-        if len(email_inquilino) > 1:
-            msg['Cc'] = ', '.join(email_inquilino[1:])
-    else:
-        msg['To'] = email_inquilino
 
-    saudacao = f"Boa tarde, {devedor._nome_inquilino.split()[0].capitalize()}<br>"
+    if tipo == 'inquilino':
+        email_inquilino = devedor._email_inquilino
+        if isinstance(email_inquilino, list):
+            msg['To'] = email_inquilino[0]
+            if len(email_inquilino) > 1:
+                msg['Cc'] = ', '.join(email_inquilino[1:])
+        else:
+            msg['To'] = email_inquilino
 
-    if devedor._cond is None:
-        introducao = f"Segue o boleto referente ao aluguel do mês de {MES_ANTERIOR} e taxa de condomínio referente ao mês vigente em anexo"
-    else:
-        introducao = f"Segue o boleto referente ao mês de {MES_ANTERIOR} em anexo"
+        saudacao = f"Boa tarde, {devedor._nome_inquilino.split()[0].capitalize()}<br>"
+        if devedor._cond is None:
+            introducao = f"Segue o boleto referente ao aluguel do mês de {MES_ANTERIOR} e taxa de condomínio referente ao mês vigente em anexo"
+        else:
+            introducao = f"Segue o boleto referente ao mês de {MES_ANTERIOR} em anexo"
+
+
+    elif tipo == 'prop':
+        email_prop = devedor._email_prop
+        if isinstance(email_prop, list):
+            msg['To'] = email_prop[0]
+            if len(email_prop) > 1:
+                msg['Cc'] = ', '.join(email_prop[1:])
+        else:
+            msg['To'] = email_prop
+            
+        saudacao = f"Boa tarde, {devedor._nome_prop.split()[0].capitalize()}<br>"
+        introducao = f"Segue o repasse referente ao mês de {MES_ANTERIOR} em anexo"
 
     corpo_email = f"""
         <p></p>
@@ -83,7 +97,7 @@ def enviar_email_inquilino(devedor):
     if devedor._pdfcond:
         anexos.append(devedor._pdfcond)
 
-    msg = criar_email(devedor, formatar_texto_inquilino(devedor), anexos)
+    msg = criar_email(devedor, formatar_texto_inquilino(devedor), anexos, 'inquilino')
     enviar_email(msg)
 
 
@@ -94,6 +108,7 @@ def enviar_email_proprietario(devedor):
     msg = criar_email(
         devedor,
         formatar_texto_proprietario(devedor),
-        [devedor._pdfrepasse] if isinstance(devedor._pdfrepasse, str) else devedor._pdfrepasse
+        [devedor._pdfrepasse] if isinstance(devedor._pdfrepasse, str) else devedor._pdfrepasse,
+        'prop'
     )
     enviar_email(msg)
