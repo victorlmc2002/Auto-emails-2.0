@@ -7,7 +7,7 @@ class EmailInterface:
         self.devedores = devedores
         self.selected_items = set()
         self.root = tk.Tk()
-        self.root.title("Envio de Emails - Sistema de Boletos")
+        self.root.title("Sistema de envio de emails")
         self.root.geometry("800x600")
 
         self.create_widgets()
