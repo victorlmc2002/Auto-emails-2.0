@@ -6,7 +6,13 @@ from pathlib import Path
 from config import MES, PASTA_BOLETOS, PASTA_CONDOMINIO, PASTA_REPASSES, ARQ_EXCEL, TXT_ENDERECOS, TXT_NOMES_INQUILINOS, TXT_EMAILS_INQUILINOS, TXT_NOMES_PROP, TXT_EMAILS_PROP
 from modelos.devedor import Devedores
 
-def ler_txt(path, lista):
+def ler_txt(path, lista=None):
+    if lista is None:
+        qtd = 0
+        with open(path, "r", encoding="utf-8") as arquivo:
+            for linha in arquivo:
+                qtd += 1
+        return qtd
     with open(path, "r", encoding="utf-8") as arquivo:
         for linha in arquivo:
             linha = linha.strip()
@@ -24,6 +30,8 @@ def ler_txt(path, lista):
             else:
                 lista.append("")
     #print(lista)
+
+QTD = ler_txt(TXT_ENDERECOS) # Quantidade de imóveis
 
 def extrair_numero(nome_arquivo):
     match = re.search(r'\d+', Path(nome_arquivo).stem)

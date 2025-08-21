@@ -1,4 +1,4 @@
-from config import QTD
+from arquivos import QTD
 from arquivos import ler_planilha
 from interface.gui import EmailInterface
 
